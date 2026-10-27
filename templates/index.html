@@ -7,14 +7,129 @@
     <title>Analizador LFP</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true });
+    </script>
 </head>
 
 <body>
-
+    <div class="container">
     <h1>Analizador Léxico y Sintáctico LFP</h1>
 
-    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <p>
+        Sistema para el análisis léxico y sintáctico de pedidos empresariales
+        usando el Lenguaje Formal de Pedidos (LFP).
+    </p>
 
+    <form method="POST" enctype="multipart/form-data">
+        <textarea 
+            name="codigo"
+            rows="10"
+            cols="80">{{ codigo if codigo else 'PEDIDO(cliente=C102, producto=P045, cantidad=3, pago=TRANSFERENCIA);' }}
+    </textarea>
+
+        <br><br>
+
+        <input type="file" name="archivo" accept=".txt">
+
+        <br><br>
+        <button type="submit">
+            Generar Análisis
+        </button>
+
+    </form>
+    {% if tokens %}
+
+    <hr>
+
+    <h2>Tabla de Lexemas</h2>
+
+    <table border="1" cellpadding="8">
+
+        <tr>
+            <th>Lexema</th>
+            <th>Token</th>
+        </tr>
+
+        {% for token in tokens %}
+        <tr>
+            <td>{{ token.lexema }}</td>
+            <td>{{ token.token }}</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+
+    <br>
+
+    {% if sintaxis_correcta %}
+
+    <div class="success-box">
+    ✅ Sintaxis Correcta
+    </div>
+
+    {% else %}
+
+    <div class="error-box">
+    ❌ Error Sintáctico
+    </div>
+
+    {% endif %}
+
+    <h2>Expresiones Regulares</h2>
+
+    {% for nombre, datos in automatas.items() %}
+
+    <div class="token-card">
+
+    <h3 class="token-title">
+        {{ nombre }}
+    </h3>
+
+    <p>
+    <strong>Regex:</strong>
+    {{ datos.regex }}
+    </p>
+
+    <p>
+    <strong>Quíntupla:</strong>
+    </p>
+
+    <pre>
+    {{ datos.quintupla }}
+    </pre>
+
+    <p>
+    <strong>AFND:</strong>
+    </p>
+
+    <div class="mermaid">
+        {{ datos.afnd_mermaid }}
+    </div>
+
+    <p>
+    <strong>AFD:</strong>
+    </p>
+
+    <div class="mermaid">
+        {{ datos.afd_mermaid }}
+    </div>
+
+    <p>
+    <strong>Tabla de Transición:</strong>
+    </p>
+
+    <pre>
+    {{ datos.tabla }}
+    </pre>
+
+    <hr>
+    </div>
+    {% endfor %}
+
+    {% endif %}
+    </div>
 </body>
 
 </html>
