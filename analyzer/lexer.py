@@ -91,6 +91,7 @@ def analizar_lexico(codigo):
 
         elif lexema == "producto":
             token = "ATR_PRODUCTO"
+            
         elif re.fullmatch(r"[a-zA-Z][a-zA-Z0-9_]*", lexema):
             token = "IDENTIFICADOR"
 
