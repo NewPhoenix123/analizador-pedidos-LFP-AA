@@ -15,18 +15,21 @@
 
 <body>
     <div class="container">
-    <h1>Analizador Léxico y Sintáctico LFP</h1>
+    <h1>
+        Compilador PedidoDSL
+    </h1>
 
     <p>
-        Sistema para el análisis léxico y sintáctico de pedidos empresariales
-        usando el Lenguaje Formal de Pedidos (LFP).
+        Sistema para la definición y validación de reglas empresariales mediante el lenguaje PedidoDSL.
     </p>
 
     <form method="POST" enctype="multipart/form-data">
         <textarea 
             name="codigo"
             rows="10"
-            cols="80">{{ codigo if codigo else 'PEDIDO(cliente=C102, producto=P045, cantidad=3, pago=TRANSFERENCIA);' }}
+            cols="80">{{ codigo if codigo else 'REGLA descuento_mayorista
+            WHEN cantidad > 50
+            THEN DESCUENTO = 15;' }}
     </textarea>
 
         <br><br>

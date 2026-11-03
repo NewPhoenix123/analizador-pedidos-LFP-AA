@@ -1,19 +1,25 @@
 import re
 
-
 def analizar_lexico(codigo):
 
     patron_general = r'''
-    PEDIDO|
-    cliente|
-    producto|
-    cantidad|
-    pago|
-    C[0-9]{3}|
-    P[0-9]{3}|
-    EFECTIVO|TRANSFERENCIA|TARJETA|
+    REGLA|
+    WHEN|
+    THEN|
+    AND|
+    OR|
+    APROBAR|
+    RECHAZAR|
+    DESCUENTO|
+    PRIORIDAD|
+    >=|
+    <=|
+    >|
+    <|
+    =|
     [0-9]+|
-    \(|\)|=|,|;
+    [a-zA-Z][a-zA-Z0-9_]*|
+    ;
     '''
 
     lexemas = re.findall(
@@ -26,47 +32,67 @@ def analizar_lexico(codigo):
 
     for lexema in lexemas:
 
-        if lexema == "PEDIDO":
-            token = "KW_PEDIDO"
+        if lexema == "REGLA":
+            token = "KW_REGLA"
 
-        elif lexema == "cliente":
-            token = "KW_CLIENTE"
+        elif lexema == "WHEN":
+            token = "KW_WHEN"
 
-        elif lexema == "producto":
-            token = "KW_PRODUCTO"
+        elif lexema == "THEN":
+            token = "KW_THEN"
 
-        elif lexema == "cantidad":
-            token = "KW_CANTIDAD"
+        elif lexema == "AND":
+            token = "KW_AND"
 
-        elif lexema == "pago":
-            token = "KW_PAGO"
+        elif lexema == "OR":
+            token = "KW_OR"
 
-        elif re.fullmatch(r"C[0-9]{3}", lexema):
-            token = "CLIENTE"
+        elif lexema == "APROBAR":
+            token = "KW_APROBAR"
 
-        elif re.fullmatch(r"P[0-9]{3}", lexema):
-            token = "PRODUCTO"
+        elif lexema == "RECHAZAR":
+            token = "KW_RECHAZAR"
 
-        elif lexema in ["EFECTIVO", "TRANSFERENCIA", "TARJETA"]:
-            token = "METODO_PAGO"
+        elif lexema == "DESCUENTO":
+            token = "KW_DESCUENTO"
+
+        elif lexema == "PRIORIDAD":
+            token = "KW_PRIORIDAD"
+
+        elif lexema == ">":
+            token = "OP_MAYOR"
+
+        elif lexema == "<":
+            token = "OP_MENOR"
+
+        elif lexema == ">=":
+            token = "OP_MAYOR_IGUAL"
+
+        elif lexema == "<=":
+            token = "OP_MENOR_IGUAL"
+
+        elif lexema == "=":
+            token = "OP_IGUAL"
+
+        elif lexema == ";":
+            token = "FIN_REGLA"
 
         elif re.fullmatch(r"[0-9]+", lexema):
             token = "NUMERO"
 
-        elif lexema == "(":
-            token = "PAREN_ABRE"
+        elif lexema == "cantidad":
+            token = "ATR_CANTIDAD"
 
-        elif lexema == ")":
-            token = "PAREN_CIERRA"
+        elif lexema == "stock":
+            token = "ATR_STOCK"
 
-        elif lexema == "=":
-            token = "IGUAL"
+        elif lexema == "compras":
+            token = "ATR_COMPRAS"
 
-        elif lexema == ",":
-            token = "COMA"
-
-        elif lexema == ";":
-            token = "PUNTO_COMA"
+        elif lexema == "producto":
+            token = "ATR_PRODUCTO"
+        elif re.fullmatch(r"[a-zA-Z][a-zA-Z0-9_]*", lexema):
+            token = "IDENTIFICADOR"
 
         else:
             token = "DESCONOCIDO"
